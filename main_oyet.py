@@ -10,6 +10,9 @@ from sse_starlette.sse import EventSourceResponse
 app = FastAPI()
 
 
+# git icin ilk deneme
+
+
 
 # CORS izinlerini belirtmek için middleware ekleme
 app.add_middleware(
