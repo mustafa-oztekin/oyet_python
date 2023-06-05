@@ -140,7 +140,7 @@ async def create_an_event(modul_id:str):
     db.commit()
     return new_event
 
-######
+
 @app.put("/item/{item_id}", response_model=Item, status_code=status.HTTP_200_OK)
 async def update_an_item(item_id:int, item:Item):
     item_to_update = db.query(models_oyet.Item).filter(models_oyet.Item.id == item_id).first()
