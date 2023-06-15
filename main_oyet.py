@@ -6,13 +6,15 @@ import models_oyet
 from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
 from sse_starlette.sse import EventSourceResponse
+import socket
+
+ip_address = "5.11.135.20"
+port = 747
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect((ip_address, port))
+print("SIM808 modülüne bağlantı başarılı.")
 
 app = FastAPI()
-
-
-# git icin ilk deneme
-
-
 
 # CORS izinlerini belirtmek için middleware ekleme
 app.add_middleware(
@@ -94,6 +96,21 @@ async def sse_endpoint():
             if (olay_zaman1.minute == olay_zaman.minute + 1):
                 sonuc_id = sonuc_id1
     return EventSourceResponse(event_generator())
+
+
+
+
+# frontend'den gelen uyari ile gprs'e tcp veri gonderecek
+@app.get("/tcp")
+async def gprs_tcp():
+    def tcp():
+        yield "data: Merhaba, frontend!\n\n"
+        #print("tcp'ye girdi.")
+        veri = "mustafa"
+        client_socket.send(veri.encode())
+    return tcp()
+
+
 
 
 
