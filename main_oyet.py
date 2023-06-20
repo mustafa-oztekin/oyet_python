@@ -8,11 +8,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from sse_starlette.sse import EventSourceResponse
 import socket
 
-ip_address = "5.11.135.20"
-port = 747
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect((ip_address, port))
-print("SIM808 modülüne bağlantı başarılı.")
+#ip_address = "5.11.135.20"
+#port = 747
+#client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#client_socket.connect((ip_address, port))
+#print("SIM808 modülüne bağlantı başarılı.")
 
 app = FastAPI()
 
@@ -20,7 +20,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Tüm kaynaklara erişime izin vermek için "*" kullanabilirsiniz
-    allow_methods=["GET"],  # Sadece GET işlemine izin vermek isterseniz burada belirtebilirsiniz
+    allow_methods=["GET", "POST"],  # Sadece GET işlemine izin vermek isterseniz burada belirtebilirsiniz
     allow_headers=["*"],  # Tüm başlıklara izin vermek için "*" kullanabilirsiniz
 )
 
@@ -107,8 +107,20 @@ async def gprs_tcp():
         yield "data: Merhaba, frontend!\n\n"
         #print("tcp'ye girdi.")
         veri = "mustafa"
-        client_socket.send(veri.encode())
+        #client_socket.send(veri.encode())
     return tcp()
+
+
+
+@app.post("/tcp")
+def listen_to_the_modul(data: dict):
+    print(data.get('modul')) # str formatinda A1, A2
+    
+    # buradan sonra gelen veriyi tcp ile gprs'e gonderip sadece
+    # gonderdigimiz modulun verisini cekecegim
+
+    #return {"success": True, "data": data}
+
 
 
 
