@@ -3,7 +3,7 @@ import serial
 import requests
 #import pickle
 
-arduino = serial.Serial(port='COM10', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0)
+arduino = serial.Serial(port='COM23', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0)
 
 #headersize = 10
 
@@ -21,9 +21,11 @@ while True:
         cleaned_data = arduino_veri.replace(b'\r\n', b'')
         #print(cleaned_data)
         cleaned_data = cleaned_data.decode('utf')
-        print(cleaned_data)
-        #response = requests.post(url + "/events/" + cleaned_data)
-        #print("İstek durumu:", response.status_code)
+        #print(cleaned_data)
+        words = cleaned_data.split('<>')
+        print(words)
+        response = requests.post(url + "/events/" + words[0])
+        print("İstek durumu:", response.status_code)
     try:
         msg = s.recv(16)
         if msg:
