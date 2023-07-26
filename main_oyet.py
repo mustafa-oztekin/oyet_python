@@ -11,13 +11,13 @@ import socket
 
 ip_address = socket.gethostname()
 port = 1234
-serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serversocket.bind((ip_address, port))
-serversocket.listen(0)
-print("Server is running now...")
+#serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#serversocket.bind((ip_address, port))
+#serversocket.listen(0)
+#print("Server is running now...")
 
-clientsocket, address = serversocket.accept()
-print(f"Connection from {address} has been established!")
+#clientsocket, address = serversocket.accept()
+#print(f"Connection from {address} has been established!")
 
 
 app = FastAPI()
@@ -124,7 +124,7 @@ async def gprs_tcp():
 def listen_to_the_modul(data: dict):
     print(data.get('modul')) # str formatinda A1, A2
     veri = data.get('modul')
-    clientsocket.send(veri.encode())
+    #clientsocket.send(veri.encode())
     # buradan sonra gelen veriyi tcp ile gprs'e gonderip sadece
     # gonderdigimiz modulun verisini cekecegim
 
