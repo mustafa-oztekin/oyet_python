@@ -11,13 +11,13 @@ import socket
 
 ip_address = socket.gethostname()
 port = 1234
-#serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#serversocket.bind((ip_address, port))
-#serversocket.listen(0)
-#print("Server is running now...")
+serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+serversocket.bind((ip_address, port))
+serversocket.listen(0)
+print("Server is running now...")
 
-#clientsocket, address = serversocket.accept()
-#print(f"Connection from {address} has been established!")
+clientsocket, address = serversocket.accept()
+print(f"Connection from {address} has been established!")
 
 
 app = FastAPI()

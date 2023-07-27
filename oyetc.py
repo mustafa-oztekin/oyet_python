@@ -2,8 +2,15 @@ import socket
 import serial
 import requests
 #import pickle
+import time
 
-arduino = serial.Serial(port='COM23', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0)
+post_counter = 0
+max_post_count = 1  # İstenilen post işleminin maksimum kaç kez yapılacağını belirleyin
+last_post_time = 0  # Zaman damgasını saklamak için bir değişken
+
+modul = ""
+
+arduino = serial.Serial(port='COM24', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0)
 
 #headersize = 10
 
@@ -17,15 +24,31 @@ while True:
     # burası c modülünün arduinosunda gelen doğrudan yangın verisi için A1'de yangın var gibi.
     if arduino.in_waiting:
         arduino_veri = arduino.readline()
-        #print(arduino_veri)
         cleaned_data = arduino_veri.replace(b'\r\n', b'')
-        #print(cleaned_data)
         cleaned_data = cleaned_data.decode('utf')
-        #print(cleaned_data)
         words = cleaned_data.split('<>')
         print(words)
-        response = requests.post(url + "/events/" + words[0])
-        print("İstek durumu:", response.status_code)
+
+        # Zaman değeri güncelleme
+        current_time = time.time()
+
+        # Belirli bir süre (örn. 2 dakika) içerisinde aynı veri gelmemişse post işlemini yapar
+        if (current_time - last_post_time > 180 or words[0] != modul):
+            print("1. if e girdi")
+            if post_counter < max_post_count:  # Sayaç değeri belirtilen maksimum sayıya ulaşmadan post işlemi yapar
+                # eger boş veri varsa post yapma
+                # if lerde bir düzenleme yapılacak, bu if kaldırılabilir.
+                response = requests.post(url + "/events/" + words[0])
+                print("İstek durumu:", response.status_code)
+                post_counter += 1  # Sayaç değerini artır
+                modul = words[0]
+
+            # Zaman damgasını günceller
+            last_post_time = current_time
+        else:
+            # Zaman süresi içerisinde aynı veri gelmişse, post işlemi yapılmaz ve sayaç sıfırlanır
+            post_counter = 0
+            
     try:
         msg = s.recv(16)
         if msg:
