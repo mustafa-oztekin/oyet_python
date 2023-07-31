@@ -106,25 +106,11 @@ async def sse_endpoint():
 
 
 
-# frontend'den gelen uyari ile gprs'e tcp veri gonderecek
-# gerek kalmadı
-"""
-@app.get("/tcp")
-async def gprs_tcp():
-    def tcp():
-        yield "data: Merhaba, frontend!\n\n"
-        #print("tcp'ye girdi.")
-        veri = "mustafa"
-        #client_socket.send(veri.encode()) evde calisirken kapadim
-    return tcp()
-"""
-
-
 @app.post("/tcp")
 def listen_to_the_modul(data: dict):
     print(data.get('modul')) # str formatinda A1, A2
     veri = data.get('modul')
-    #clientsocket.send(veri.encode())
+    clientsocket.send(veri.encode())
     # buradan sonra gelen veriyi tcp ile gprs'e gonderip sadece
     # gonderdigimiz modulun verisini cekecegim
 
