@@ -29,23 +29,28 @@ while True:
         words = cleaned_data.split('<>')
         print(words)
 
-        # Zaman değeri güncelleme
-        current_time = time.time()
 
-        # Belirli bir süre (örn. 2 dakika) içerisinde aynı veri gelmemişse post işlemini yapar
-        if (current_time - last_post_time > 180 or words[0] != modul):
-        #    if post_counter < max_post_count:  # Sayaç değeri belirtilen maksimum sayıya ulaşmadan post işlemi yapar
-            if (words[0] != ""): # boş gelen veri durumunda post yapmasın
-                response = requests.post(url + "/events/" + words[0])
-                print("İstek durumu:", response.status_code)
-            #    post_counter += 1  # Sayaç değerini artır
-                modul = words[0]
+        if (len(words[0]) == 3):
+            s.send(words[1].encode())
 
-            # Zaman damgasını günceller
-            last_post_time = current_time
-        #else: sadece süreyle kontrol etmek için burayı kapatmayı deniyorum
-            # Zaman süresi içerisinde aynı veri gelmişse, post işlemi yapılmaz ve sayaç sıfırlanır
-         #   post_counter = 0
+        else:
+            # Zaman değeri güncelleme
+            current_time = time.time()
+
+            # Belirli bir süre (örn. 2 dakika) içerisinde aynı veri gelmemişse post işlemini yapar
+            if (current_time - last_post_time > 180 or words[0] != modul):
+            #    if post_counter < max_post_count:  # Sayaç değeri belirtilen maksimum sayıya ulaşmadan post işlemi yapar
+                if (words[0] != ""): # boş gelen veri durumunda post yapmasın
+                    response = requests.post(url + "/events/" + words[0])
+                    print("İstek durumu:", response.status_code)
+                #    post_counter += 1  # Sayaç değerini artır
+                    modul = words[0]
+
+                # Zaman damgasını günceller
+                last_post_time = current_time
+            #else: sadece süreyle kontrol etmek için burayı kapatmayı deniyorum
+                # Zaman süresi içerisinde aynı veri gelmişse, post işlemi yapılmaz ve sayaç sıfırlanır
+            #   post_counter = 0
             
     try:
         msg = s.recv(16)

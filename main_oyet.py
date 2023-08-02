@@ -7,6 +7,7 @@ from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
 from sse_starlette.sse import EventSourceResponse
 import socket
+import asyncio
 
 
 ip_address = socket.gethostname()
@@ -107,14 +108,25 @@ async def sse_endpoint():
 
 
 @app.post("/tcp")
-def listen_to_the_modul(data: dict):
-    print(data.get('modul')) # str formatinda A1, A2
+async def listen_to_the_modul(data: dict):
+    print(data.get('modul')) 
     veri = data.get('modul')
     clientsocket.send(veri.encode())
-    # buradan sonra gelen veriyi tcp ile gprs'e gonderip sadece
-    # gonderdigimiz modulun verisini cekecegim
-
-    #return {"success": True, "data": data}
+    msg = ""
+    
+    # Soketten asenkron olarak veri alın
+    try:
+        loop = asyncio.get_event_loop()
+        msg = await loop.sock_recv(clientsocket, 16)
+        # Gelen veriyi işleyin veya beklediğiniz sonucu elde edin
+        result = msg.decode("utf-8")  # Örnek olarak gelen veriyi utf-8 kodlamasıyla çözümlüyoruz
+    except Exception as e:
+        # Hata durumlarına göre işlem yapabilirsiniz
+        #result = "Error: " + str(e)
+        pass
+    
+    # simulate_long_process() fonksiyonu tamamlandıktan sonra gelen veriyi döndürün
+    return {"success": True, "data": result}
 
 
 
