@@ -11,7 +11,7 @@ import asyncio
 
 
 ip_address = socket.gethostname()
-port = 1234
+port = 5000
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serversocket.bind((ip_address, port))
 serversocket.listen(0)
@@ -93,6 +93,7 @@ async def sse_endpoint():
         global sonuc_id1
         global event_sonuc1
         #yield "data: Merhaba, frontend!\n\n"
+        # await kullanabilirsin
         sorgu_event1 = db.query(models_oyet.Event).all()
         for event_sonuc1 in sorgu_event1:
             pass
@@ -105,28 +106,38 @@ async def sse_endpoint():
     return EventSourceResponse(event_generator())
 
 
+#yukarısı için async ve await örnek
+#@app.get("/users")
+#async def get_users():
+#    users = await fetch_users_from_database()
+#    return {"users": users}
+
+
 
 
 @app.post("/tcp")
 async def listen_to_the_modul(data: dict):
+    result = ""
     print(data.get('modul')) 
     veri = data.get('modul')
     clientsocket.send(veri.encode())
-    msg = ""
     
     # Soketten asenkron olarak veri alın
     try:
         loop = asyncio.get_event_loop()
         msg = await loop.sock_recv(clientsocket, 16)
         # Gelen veriyi işleyin veya beklediğiniz sonucu elde edin
-        result = msg.decode("utf-8")  # Örnek olarak gelen veriyi utf-8 kodlamasıyla çözümlüyoruz
+        result = msg.decode()  # Örnek olarak gelen veriyi utf-8 kodlamasıyla çözümlüyoruz
     except Exception as e:
         # Hata durumlarına göre işlem yapabilirsiniz
         #result = "Error: " + str(e)
         pass
     
     # simulate_long_process() fonksiyonu tamamlandıktan sonra gelen veriyi döndürün
-    return {"success": True, "data": result}
+    if result:
+        print("tcp veri gönderdi.")
+        return {"success": True, "data": result}
+    result = ""
 
 
 
