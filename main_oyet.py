@@ -116,28 +116,25 @@ async def sse_endpoint():
 
 
 @app.post("/tcp")
-async def listen_to_the_modul(data: dict):
+def listen_to_the_modul(data: dict):
     result = ""
-    print(data.get('modul')) 
     veri = data.get('modul')
     clientsocket.send(veri.encode())
     
-    # Soketten asenkron olarak veri alın
     try:
-        loop = asyncio.get_event_loop()
-        msg = await loop.sock_recv(clientsocket, 16)
-        # Gelen veriyi işleyin veya beklediğiniz sonucu elde edin
-        result = msg.decode()  # Örnek olarak gelen veriyi utf-8 kodlamasıyla çözümlüyoruz
+        clientsocket.settimeout(8)  # 10 saniye süreyle socket'ten veri bekliyoruz
+        msg = clientsocket.recv(16)
+        result = msg.decode()
+    except socket.timeout:
+        print("hataya girdi")
+        return {"success": False, "data": "Timeout: Veri alınamadı"}
     except Exception as e:
-        # Hata durumlarına göre işlem yapabilirsiniz
-        #result = "Error: " + str(e)
         pass
     
-    # simulate_long_process() fonksiyonu tamamlandıktan sonra gelen veriyi döndürün
     if result:
         print("tcp veri gönderdi.")
         return {"success": True, "data": result}
-    result = ""
+    
 
 
 
