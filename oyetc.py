@@ -10,12 +10,12 @@ last_post_time = 0  # Zaman damgasını saklamak için bir değişken
 
 modul = ""
 
-arduino = serial.Serial(port='COM24', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0)
+arduino = serial.Serial(port='COM26', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0)
 
 #headersize = 10
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((socket.gethostname(), 1234))
+s.connect((socket.gethostname(), 5000))
 s.setblocking(False) # bu sayede s.recv() kod bloğunun beklemesini önledim.
 
 url = "http://127.0.0.1:8000"

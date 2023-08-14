@@ -10,7 +10,7 @@ last_post_time = 0  # Zaman damgasını saklamak için bir değişken
 
 modul = ""
 
-arduino = serial.Serial(port='COM10', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0)
+arduino = serial.Serial(port='COM26', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=0)
 
 #headersize = 10
 
@@ -27,7 +27,7 @@ while True:
         cleaned_data = arduino_veri.replace(b'\r\n', b'')
         cleaned_data = cleaned_data.decode('utf')
         words = cleaned_data.split('<>')
-        print(words)
+        print(words, type(words), len(words))
 
 
         if (len(words[0]) == 3):

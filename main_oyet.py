@@ -92,17 +92,18 @@ async def sse_endpoint():
         global sonuc_id
         global sonuc_id1
         global event_sonuc1
-        #yield "data: Merhaba, frontend!\n\n"
         # await kullanabilirsin
         sorgu_event1 = db.query(models_oyet.Event).all()
         for event_sonuc1 in sorgu_event1:
             pass
         sonuc_id1 = event_sonuc1.id
         if (sonuc_id1 > sonuc_id):
+            print(sonuc_id1)
             yield event_sonuc1.modul_name
             olay_zaman1 = datetime.now()
-            if (olay_zaman1.minute == olay_zaman.minute + 1):
+            if (olay_zaman1.minute >= olay_zaman.minute + 1):
                 sonuc_id = sonuc_id1
+                print("id'ler eşitlendi.")
     return EventSourceResponse(event_generator())
 
 
