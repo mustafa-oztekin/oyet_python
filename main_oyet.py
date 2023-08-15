@@ -121,19 +121,21 @@ def listen_to_the_modul(data: dict):
     result = ""
     veri = data.get('modul')
     clientsocket.send(veri.encode())
-    
-    try:
-        clientsocket.settimeout(8)  # 10 saniye süreyle socket'ten veri bekliyoruz
-        msg = clientsocket.recv(16)
-        result = msg.decode()
-    except socket.timeout:
-        print("hataya girdi")
-        return {"success": False, "data": "Timeout: Veri alınamadı"}
-    except Exception as e:
-        pass
+
+    if result == "":
+        try:
+            print("tcp try'a girdi...")
+            clientsocket.settimeout(8)  # 10 saniye süreyle socket'ten veri bekliyoruz
+            msg = clientsocket.recv(5)
+            result = msg.decode()
+        except socket.timeout:
+            print("hataya girdi")
+            return {"success": False, "data": "Timeout: Veri alınamadı"}
+        except Exception as e:
+            pass
     
     if result:
-        print("tcp veri gönderdi.")
+        print(result)
         return {"success": True, "data": result}
     
 
