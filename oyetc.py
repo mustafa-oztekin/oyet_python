@@ -30,21 +30,21 @@ while True:
         print(words)
 
 
-        if (len(words[0]) == 3):
+        if (len(words) == 2 and len(words[0]) == 3):
             s.send(words[1].encode())
-
-        else:
+            
+        elif (len(words) == 2 and len(words[0]) == 2):
             # Zaman değeri güncelleme
             current_time = time.time()
 
             # Belirli bir süre (örn. 2 dakika) içerisinde aynı veri gelmemişse post işlemini yapar
             if (current_time - last_post_time > 180 or words[0] != modul):
             #    if post_counter < max_post_count:  # Sayaç değeri belirtilen maksimum sayıya ulaşmadan post işlemi yapar
-                if (words[0] != ""): # boş gelen veri durumunda post yapmasın
-                    response = requests.post(url + "/events/" + words[0])
-                    print("İstek durumu:", response.status_code)
+            #    if (words[0] != ""): # boş gelen veri durumunda post yapmasın
+                response = requests.post(url + "/events/" + words[0])
+                print("İstek durumu:", response.status_code)
                 #    post_counter += 1  # Sayaç değerini artır
-                    modul = words[0]
+                modul = words[0]
 
                 # Zaman damgasını günceller
                 last_post_time = current_time
@@ -53,7 +53,7 @@ while True:
             #   post_counter = 0
             
     try:
-        msg = s.recv(16)
+        msg = s.recv(3)
         if msg:
             msg = msg.decode("utf-8")
             print("Received:", msg)
