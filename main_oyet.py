@@ -210,3 +210,7 @@ async def delete_an_item(item_id:int):
     db.delete(item_to_delete)
     db.commit()
     return item_to_delete
+
+#if __name__ == "__main__":
+#    import uvicorn
+#    uvicorn.run(app, host = "0.0.0.0", port = 8000)
