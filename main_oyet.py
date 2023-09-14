@@ -118,25 +118,24 @@ async def sse_endpoint():
 
 @app.post("/tcp")
 def listen_to_the_modul(data: dict):
-    result = ""
-    veri = data.get('modul')
-    clientsocket.send(veri.encode())
+    try:
+        veri = data.get('modul')
+        clientsocket.send(veri.encode())
 
-    if result == "":
-        try:
-            print("tcp try'a girdi...")
-            clientsocket.settimeout(8)  # 10 saniye süreyle socket'ten veri bekliyoruz
-            msg = clientsocket.recv(5)
-            result = msg.decode()
-        except socket.timeout:
-            print("hataya girdi")
-            return {"success": False, "data": "Timeout: Veri alınamadı"}
-        except Exception as e:
-            pass
-    
-    if result:
+        print(veri)
+        clientsocket.settimeout(8)  # 10 saniye süreyle socket'ten veri bekliyoruz
+        msg = clientsocket.recv(5)
+        result = msg.decode()
+
         print(result)
         return {"success": True, "data": result}
+
+    except socket.timeout:
+        print("Timeout Hatası")
+        return {"success": False, "data": "Timeout: Veri alınamadı"}
+    except Exception as e:
+        print("Beklenmeyen bir hata oluştu:", str(e))
+        return {"success": False, "data": "Beklenmeyen bir hata oluştu"}
     
 
 
@@ -211,6 +210,6 @@ async def delete_an_item(item_id:int):
     db.commit()
     return item_to_delete
 
-#if __name__ == "__main__":
-#    import uvicorn
-#    uvicorn.run(app, host = "0.0.0.0", port = 8000)
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host = "0.0.0.0", port = 8000)

@@ -26,7 +26,7 @@ while True:
         try:
             arduino_veri = arduino.readline()
             cleaned_data = arduino_veri.replace(b'\r\n', b'')
-            #print(cleaned_data)
+            print(cleaned_data)
             cleaned_data = cleaned_data.decode('utf-8')
             words = cleaned_data.split('<>')
             print(words)
@@ -40,7 +40,7 @@ while True:
                 current_time = time.time()
 
                 # Belirli bir süre (örn. 2 dakika) içerisinde aynı veri gelmemişse post işlemini yapar
-                if (current_time - last_post_time > 180 or words[0] != modul):
+                if (current_time - last_post_time > 60 or words[0] != modul):
                 #    if post_counter < max_post_count:  # Sayaç değeri belirtilen maksimum sayıya ulaşmadan post işlemi yapar
                 #    if (words[0] != ""): # boş gelen veri durumunda post yapmasın
                     response = requests.post(url + "/events/" + words[0][:2])
@@ -58,7 +58,7 @@ while True:
             pass
             
     try:
-        msg = s.recv(5)
+        msg = s.recv(8)
         if msg:
             msg = msg.decode("utf-8")
             print("Received:", msg)
