@@ -124,7 +124,7 @@ def listen_to_the_modul(data: dict):
 
         print(veri)
         clientsocket.settimeout(8)  # 10 saniye süreyle socket'ten veri bekliyoruz
-        msg = clientsocket.recv(5)
+        msg = clientsocket.recv(12)
         result = msg.decode()
 
         print(result)
